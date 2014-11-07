@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block page_titel%}
+KM SYSTE - Item List
+{% endblock %}
+
+{% block page_content %}
+<h4 class="page-header">Item List</h4>
+
+<a href="{% url 'item:add' %}" class="btn btn-default">Add New Item</a>
+{#<a href="{% url 'item:kinds' %}" class="btn btn-default">Kinds Management</a>#}
+<br>
+
+{#<form action="{% url 'item:search' %}" method="post" class="form">{% csrf_token %}#}
+{#	<input type="text" name="search">#}
+{#	<input type="submit" value="SEARCH" class="btn btn-default">#}
+{#</form>#}
+
+<hr>
+{% if status %}
+	<p>{{ status }}</p>
+{% endif %}
+
+<div class="table-responsive">
+<table class="table table-condensed table-striped">
+<thead>
+	<tr>
+		<td class="span1">CODE</td>
+		<td class="span1">NAME</td>
+		<td class="span1">SUPPLIER</td>
+		<td class="span1">CATEGORY</td>
+		<td class="span1">LARGE UOM</td>
+		<td class="span1">LARGE QTY</td>
+		<td class="span1">LARGE PRICE</td>
+		<td class="span1">MID UOM</td>
+		<td class="span1">MID QTY</td>
+		<td class="span1">MID PRICE</td>
+		<td class="span1">SML UOM</td>
+		<td class="span1">SML QTY</td>
+		<td class="span1">SML PRICE</td>
+		<td class="span1">REMARK</td>
+		<td class="span1">CREATE_BY</td>
+		<td class="span1">CREATE_DATE</td>
+		<td class="span1">EDIT_BY</td>
+		<td class="span1">EDIT_DATE</td>
+		<td>-</td><td>-</td>
+	</tr>
+</thead>
+<tbody id="item_list">
+{% for item in object_list %}
+	<p id="status"></p>
+	<tr>
+	<form id="item_list" action="" method="post" class="form_inline">{% csrf_token %}
+		<td><input id="code" type="text" name="code" 	value="{{item.code}}" readonly></td>
+		<td><textarea id="name" rows="1" cols="30" name="name">{{item.name}}</textarea></td>
+		<td><input id="supplier" 	type="text" name="supplier" 	value="{{ item.supplier }}"></td>
+		<td><input id="category"	type="text" name="category" 	value="{{ item.category }}" ></td>
+		<td><input id="large_uom" 	type="text" name="large_uom" 	value="{{ item.large_uom }}" ></td>
+		<td><input id="large_qty" 	type="text" name="large_qty" 		value="{{ item.large_qty }}" ></td>
+		<td><input id="large_price" 	type="text" name="large_price" 	value="{{ item.large_price }}" ></td>
+		<td><input id="med_uom" 	type="text" name="med_uom" 	value="{{ item.med_uom }}" ></td>
+		<td><input id="med_qty" 	type="text" name="med_qty" 	value="{{ item.med_qty }}" ></td>
+		<td><input id="med_price" 	type="text" name="med_price" 	value="{{ item.med_price }}" ></td>
+		<td><input id="sml_uom" 	type="text" name="sml_uom" 	value="{{ item.sml_uom }}" ></td>
+		<td><input id="sml_qty" 	type="text" name="sml_qty" 	value="{{ item.sml_qty }}" ></td>
+		<td><input id="sml_price" 	type="text" name="sml_price" 	value="{{ item.sml_price}}" ></td>
+		<td><textarea id="remark" rows="1" cols="30" name="remark">{{ item.remark }}</textarea></td>
+		<td><input id="create_by" type="text" name="create_by" 	value="{{ item.create_by }}" readonly></td>
+		<td><input id="create_date" type="text" name="create_date" 	value="{{ item.create_date }}" readonly></td>
+		<td><input id="edit_by" type="text" name="edit_by" 	value="{{ item.edit_by }}" readonly></td>
+		<td><input id="edit_date" type="text" name="edit_date" 	value="{{ item.edit_date }}" readonly></td>
+		<input id="id" 	type="hidden" name="item_id" value="{{ item.id }}" >
+		<td><input type="submit" value="EDIT" class="btn btn-default" id="edit-{{ item.id}}"></td>
+		<td><a href="{% url 'item:delete' item.id %}" class="btn btn-default">DELETE</a></td>
+	</form>
+	</tr>
+
+{% endfor %}
+</tbody>			
+
+</table>
+</div>
+
+
+<script src="{% static 'js/km_ajax.js' %}"></script>
+
+{% endblock %}

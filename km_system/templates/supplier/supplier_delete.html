@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+	KM SYSTEM - Supplier Delete
+{% endblock %}
+
+{% block page_content %}
+<h1 class="page-header">Supplier Delete</h1>
+
+<p>Are you sure you want to delete the contact {{ suppier.id }}?</p>
+
+<form class="form" action="{% url 'supplier:delete' pk=supplier.id %}" method="post">{% csrf_token %}
+	<input id="save-supplier" type="submit" value="Delete" />
+	<a class="btn btn-default" href="{% url 'supplier:list' %}">Cancel</a>
+</form>
+
+{% endblock %}

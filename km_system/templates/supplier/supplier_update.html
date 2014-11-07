@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+	KM SYSTEM - Supplier Detail
+{% endblock %}
+
+{% block page_content %}
+<h1 class="page-header">Supplier Detail</h1>
+<form class="form" action="" method="post">{% csrf_token %}
+	{{ form.as_p }}
+	<input id="save_supplier" type="submit" value="Save" />
+	<a class="btn btn-default" href="{% url 'supplier:delete' pk=supplier.id  %}">Delete</a>
+</form>
+
+<a class="btn btn-default" href="{% url 'supplier:list' %}">Back to List</a>
+{% endblock %}

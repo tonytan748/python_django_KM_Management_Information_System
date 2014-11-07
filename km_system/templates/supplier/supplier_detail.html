@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+	KM SYSTEM - Supplier Delete
+{% endblock %}
+
+{% block page_content %}
+<h1 class="page-header">code</h1>
+
+{% for i in details %}
+<p>{{ i.code }}</p>
+<p>{{ i.name }}</p>
+<p>{{ i.address }}</p>
+<p>{{ i.product }}</p>
+<p>{{ i.contact }}</p>
+<p>{{ i.phone }}</p>
+{% endfor %}
+{% endblock %}

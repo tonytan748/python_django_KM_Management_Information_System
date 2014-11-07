@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block page_titel%}
+KM SYSTE - Supplier List
+{% endblock %}
+
+
+{% block page_content %}
+<h4 class="page-header">Supplier List</h4>
+
+<a href="{% url 'supplier:add' %}" class="btn btn-default">Add New Supplier</a>
+<br>
+
+<form action="{% url 'supplier:search' %}" method="post" class="form">{% csrf_token %}
+	<input type="text" name="search">
+	<input type="submit" value="SEARCH" class="btn btn-default">
+</form>
+
+<hr>
+{% if status %}
+	<p>{{ status }}</p>
+{% endif %}
+
+<div class="table-responsive">
+<table class="table table-condensed table-striped">
+<thead>
+	<tr>
+		<td class="span1">CODE</td>
+		<td class="span1">NAME</td>
+		<td class="span1">ADDRESS</td>
+		<td class="span1">PRODUCT</td>
+		<td class="span1">CONTACT</td>
+		<td class="span1">PHONE</td>
+		<td class="span1">FAX</td>
+		<td class="span1">REMARK</td>
+		<td class="span1">CREATE_BY</td>
+		<td class="span1">CREATE_DATE</td>
+		<td class="span1">EDIT_BY</td>
+		<td class="span1">EDIT_DATE</td>
+		<td>-</td><td>-</td>
+	</tr>
+</thead>
+<tbody id="supplier_list">
+{% for supplier in object_list %}
+	<p id="status"></p>
+	<tr>
+	<form id="supplier_item" action="" method="post" class="form">{% csrf_token %}
+		<td><input id="code" type="text" name="code" 	value="{{supplier.code}}" readonly></td>
+		<td><input id="name" type="text" name="name" 	value="{{supplier.name}}" ></td>
+		<td><textarea id="address" rows="1" cols="30" name="address">{{supplier.address}}</textarea></td>
+		<td><input id="product"	type="text" name="product" 	value="{{supplier.product}}" ></td>
+		<td><input id="contact" type="text" name="contact" 	value="{{supplier.contact}}" ></td>
+		<td><input id="phone" 	type="text" name="phone" 	value="{{supplier.phone}}" ></td>
+		<td><input id="fax" 	type="text" name="fax" 		value="{{supplier.fax}}" ></td>
+		<td><input id="remark" 	type="text" name="remark" 	value="{{supplier.remark}}" ></td>
+		<td><input id="create_by" type="text" name="create_by" 	value="{{supplier.create_by}}" readonly></td>
+		<td><input id="create_date" type="text" name="create_date" 	value="{{supplier.create_date}}" readonly></td>
+		<td><input id="edit_by" type="text" name="edit_by" 	value="{{supplier.edit_by}}" readonly></td>
+		<td><input id="edit_date" type="text" name="edit_date" 	value="{{supplier.edit_date}}" readonly></td>
+		<input id="id" 	type="hidden" name="supplier_id" value="{{supplier.id}}" >
+		<td><input type="submit" value="EDIT" class="btn btn-default" id="edit-{{supplier.id}}"></td>
+		<td><a href="{% url 'supplier:delete' supplier.id %}" class="btn btn-default">DELETE</a></td>
+	</form>
+	</tr>
+
+{% endfor %}
+</tbody>			
+
+</table>
+</div>
+
+
+<script src="{% static 'js/km_ajax.js' %}"></script>
+
+{% endblock %}
