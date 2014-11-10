@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block page_titel%}
+KM SYSTE - Kinds List
+{% endblock %}
+
+{% block page_content %}
+<h4 class="page-header">Kinds List</h4>
+
+<br>
+
+<form action="{% url 'item:kindsadd' %}" method="post" class="form">{%csrf_token%}
+	{{ form.as_p }}
+	<input type="submit" value="ADD" class="btn btn-default">
+</form>
+
+<hr>
+{% if status %}
+	<p>{{ status }}</p>
+{% endif %}
+
+<div class="table-responsive">
+<table class="table table-condensed table-striped">
+<thead>
+	<tr>
+		<td class="span1">CODE</td>
+		<td class="span1">MAIN COTEGURY</td>
+		<td class="span1">SUB COTEGORY</td>
+		<td class="span1">CREATE_BY</td>
+		<td class="span1">CREATE_DATE</td>
+		<td class="span1">EDIT_BY</td>
+		<td class="span1">EDIT_DATE</td>
+		<td>-</td><td>-</td>
+	</tr>
+</thead>
+<tbody id="kinds_list">
+{% for item in object_list %}
+	<p id="status"></p>
+	<tr>
+	<form id="kinds_list" action="" method="post" class="form_inline">{% csrf_token %}
+		<td><input id="code" 		type="text" name="kinds_id" 	value="{{item.id}}" readonly></td>
+		<td><input id="main_category" 	type="text" name="main_category" value="{{ item.main_category }}"></td>
+		<td><input id="sub_category"	type="text" name="sub_category" value="{{ item.sub_category }}" ></td>
+		<td><input id="create_by" 	type="text" name="create_by" 	value="{{ item.create_by }}" readonly></td>
+		<td><input id="create_date" 	type="text" name="create_date" 	value="{{ item.create_date }}" readonly></td>
+		<td><input id="edit_by" 	type="text" name="edit_by" 	value="{{ item.edit_by }}" readonly></td>
+		<td><input id="edit_date" 	type="text" name="edit_date" 	value="{{ item.edit_date }}" readonly></td>
+		<input id="id" 			type="hidden" name="item_id" 	value="{{ item.id }}" >
+		<td><input type="submit" value="EDIT" class="btn btn-default" id="edit"></td>
+		<td><a href="{% url 'item:kindsdelete' item.id %}" class="btn btn-default">DELETE</a></td>
+	</form>
+	</tr>
+
+{% endfor %}
+</tbody>			
+
+</table>
+</div>
+
+
+<script src="{% static 'js/km_ajax.js' %}"></script>
+
+{% endblock %}

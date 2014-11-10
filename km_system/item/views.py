@@ -1,5 +1,6 @@
 import datetime
 import json
+import xlwt
 
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -44,10 +45,13 @@ def ItemListView(request):
 				status='please try again.'
 				print str(e)
 			item=Item.objects.all()
-			return render(request,'item/item_list.html',{'object_list':item,'status':status})
+			supplier_list=Supplier.objects.all()
+			return HttpResponseRedirect('../item',{'object_list':item,'status':status,'suppliers':supplier_list})
+#			return render(request,'item/item_list.html',{'object_list':item,'status':status,'suppliers':supplier_list})
 	print "title..."
 	item=Item.objects.all()
-	return render(request,'item/item_list.html',{'object_list':item})
+	suppliers=Supplier.objects.all()
+	return render(request,'item/item_list.html',{'object_list':item,'suppliers':suppliers})
 
 @login_required
 def add_item(request):
@@ -102,15 +106,137 @@ def del_item(request,pk):
 @login_required
 def search_item(request):
 	if request.method=='POST':
-		word=request.POST.get('search')
+		word=request.POST.get('search_name')
+		code=request.POST.get('search_code')
+		supplier=request.POST.get('search_supplier')
 		print word
-		word=str(word).upper()
-		if word.strip():
-			result=Item.objects.filter(Q(code__icontains=word)|Q(name__icontains=word)|Q(supplier__icontains=word)|Q(large_uom__icontains=word)|Q(med_uom__icontains=word)|Q(sml_uom__icontains=word))
-			if result:
-				return render(request,'item/item_list.html',{'object_list':result,'status':'search success.'})
-			return HttpResponseRedirect('/item',{'object_list':Item.objects.all(),'status':'Cannot find it, please try again'})
-		return HttpResponseRedirect('/item',{'status':'nothing to find.'})
+		print code
+		print supplier
+		if word:
+			word=str(word).upper()
+			result=Item.objects.filter(Q(name__icontains=word)|Q(large_uom__icontains=word)|Q(med_uom__icontains=word)|Q(sml_uom__icontains=word))
+		if code:
+			code=int(code)
+			result=Item.objects.filter(Q(code__icontains=code))
+		if supplier is None:
+			supplier=None
+			result=Item.objects.filter(Q(supplier__icontains=supplier))
+		if result:
+			return render(request,'item/item_list.html',{'object_list':result,'status':'search success.'})
+		return HttpResponseRedirect('/item',{'status':'nothing to find.','object_list':Item.obejcts.all()})
 	return HttpResponseRedirect('/item',{'status':'Nothing.'})
+
+@login_required
+def export_item_list(request):
+	response=HttpResponse(mimetype="application/vnd.ms-excel")
+	response['Content-Disposition']="attachment;filename=export_agencycustomer.xls"
+	wb=xlwt.Workbook(encoding="utf-8")
+	sheet=wb.add_sheet('ITEMS')
+	sheet.write(0,0,'code')
+	sheet.write(0,1,'name')
+	sheet.write(0,2,'supplier')
+	sheet.write(0,3,'category')
+	sheet.write(0,4,'large_uom')
+	sheet.write(0,5,'large_qty')
+	sheet.write(0,6,'large_price')
+	sheet.write(0,7,'med_uom')
+	sheet.write(0,8,'med_qty')
+	sheet.write(0,9,'med_price')
+	sheet.write(0,10,'sml_uom')
+	sheet.write(0,11,'sml_qty')
+	sheet.write(0,12,'sml_price')
+	sheet.write(0,13,'remark')
+	sheet.write(0,14,'create_by')
+	sheet.write(0,15,'create_date')
+	sheet.write(0,16,'edit_by')
+	sheet.write(0,17,'edit_date')
+
+	row=1
+	for item in Item.objects.all():
+		sheet.write(row,0,item.code)
+		sheet.write(row,1,item.name)
+		sheet.write(row,2,item.supplier)
+		sheet.write(row,3,item.category)
+		sheet.write(row,4,item.large_uom)
+		sheet.write(row,5,item.large_qty)
+		sheet.write(row,6,item.large_price)
+		sheet.write(row,7,item.med_uom)
+		sheet.write(row,8,item.med_qty)
+		sheet.write(row,9,item.med_price)
+		sheet.write(row,10,item.sml_uom)
+		sheet.write(row,11,item.sml_qty)
+		sheet.write(row,12,item.sml_price)
+		sheet.write(row,13,item.remark)
+		sheet.write(row,14,item.create_by)
+		sheet.write(row,15,item.create_date)
+		sheet.write(row,16,item.edit_by)
+		sheet.write(row,16,item.edit_date)
+		row=row+1
+	output=StringIO.StringIO()
+	wb.save(output)
+	output.seek(0)
+	response.write(output.getvalue())
+	return response
+		
+
+
+@login_required
+def kinds_list(request):
+	if request.method=='POST':
+		if request.POST.get('kinds_id'):
+			sid=request.POST.get('kinds_id')
+			try:
+				kinds=Item.objects.get(id=int(sid))
+				kinds.main_category=str(request.POST.get('main_category')).upper()
+				kinds.sub_category=str(request.POST.get('sub_category')).upper()
+				kinds.edit_by=str(request.user).upper()
+				kinds.edit_date=str(datetime.datetime.now()).upper()
+				kinds.save()
+				print "saved... ..."
+				status='edit success'
+			except Exception as e:
+				status='please try again.'
+				print str(e)
+			kinds_list=Kinds.objects.all()
+			form=KindsForm()
+			return render(request,'item/kinds_list.html',{'object_list':kinds_list,'status':status,'form':form})
+	print "title..."
+	kinds_list=Kinds.objects.all()
+	form=KindsForm()
+	return render(request,'item/kinds_list.html',{'object_list':kinds_list,'form':form})
+
+@login_required
+def kinds_add(request):
+	if request.method=='POST':
+		if request.POST.get('main_category') and request.POST.get('sub_category'):
+			form=KindsForm(request.POST)
+			form_item=form.save(commit=False)
+			form.main_category=(form_item.main_category).upper()
+			form.sub_category=(form_item.sub_category).upper()
+			print form.sub_category
+			form.create_by=str(request.user).upper()
+			form.create_date=str(datetime.datetime.now())
+			form.save()
+			status="add success!"
+		else:
+			status="please try again!"
+		form=KindsForm()
+		return HttpResponseRedirect('/item/kinds',{'object_list':Kinds.objects.all(),'form':form,'status':status})
+	else:
+		form=KindsForm()	
+	return HttpResponseRedirect('/item/kinds',{'object_list':Kinds.objects.all(),'form':form})
+
+@login_required
+def kinds_delete(request,pk):
+	if pk:
+		print pk
+		try:
+			item=Kinds.objects.get(pk=pk)
+			item.delete()
+		except Exception as e:
+			print str(e)
+		form=KindsForm()
+		return HttpResponseRedirect('/item/kinds',{'object_list':Kinds.objects.all(),'form':form})
+
 
 

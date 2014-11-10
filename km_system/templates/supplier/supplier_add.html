@@ -6,6 +6,7 @@
 
 {% block page_content %}
 <h1 class="page-header">Supplier Add</h1>
+<a class="btn btn-default" href="{% url 'supplier:list' %}">Back to List</a>
 
 <form class="form" action="" method="post">{% csrf_token %}
 	{% for field in form %}
@@ -16,5 +17,4 @@
 	<input id="save_supplier" class="btn btn-default" type="submit" value="Save" />
 </form>
 
-<a class="btn btn-default" href="{% url 'supplier:list' %}">Back to List</a>
 {% endblock %}

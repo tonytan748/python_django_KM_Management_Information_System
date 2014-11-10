@@ -10,13 +10,29 @@ KM SYSTE - Item List
 <h4 class="page-header">Item List</h4>
 
 <a href="{% url 'item:add' %}" class="btn btn-default">Add New Item</a>
-{#<a href="{% url 'item:kinds' %}" class="btn btn-default">Kinds Management</a>#}
-<br>
 
-{#<form action="{% url 'item:search' %}" method="post" class="form">{% csrf_token %}#}
-{#	<input type="text" name="search">#}
-{#	<input type="submit" value="SEARCH" class="btn btn-default">#}
-{#</form>#}
+
+<a href="{% url 'item:kinds' %}" class="btn btn-default">Kinds Management</a>
+<a class="icon" href="#" onclick="javascript:window.open('/export_item/?ids='+document.getElementByIdx_x('ids').value)"><span>Export EXCEL</span></a>
+
+<form action="{% url 'item:search' %}" method="post" class="form">{% csrf_token %}
+	<input type="text" name="search_name" placeholder="SEARCH">
+	<label>CODE:</label>
+	<select placeholder="CODE" name="search_code">
+		<option></option>
+		{% for item in object_list %}
+			<option>{{ item.code }}</option>
+		{% endfor %}
+	</select>
+	<label>SUPPLIER:</label>
+	<select placeholder="SUPPLIER" name="search_supplier">
+		<option></option>
+		{% for supplier in suppliers %}
+			<option>{{ supplier.name }}</option>
+		{% endfor %}
+	</select>
+	<input type="submit" value="SEARCH" class="btn btn-default">
+</form>
 
 <hr>
 {% if status %}
