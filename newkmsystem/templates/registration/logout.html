@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block body_block %}
+<h1>Logged out</h1>
+	<p> logged out.</p>
+<script language="javascript" type="text/javascript">
+window.location.href="{% url 'login' %}"
+</script>
+{% endblock%}
