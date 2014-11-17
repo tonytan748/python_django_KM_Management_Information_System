@@ -1,6 +1,7 @@
 import datetime
 import json
 import xlwt
+import StringIO
 
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -112,6 +113,8 @@ def search_item(request):
 		print word
 		print code
 		print supplier
+		if word=="" and code=="" and supplier=="":
+			return HttpResponseRedirect('/item',{'status':'nothing to find.','object_list':Item.objects.all()})
 		if word:
 			word=str(word).upper()
 			result=Item.objects.filter(Q(name__icontains=word)|Q(large_uom__icontains=word)|Q(med_uom__icontains=word)|Q(sml_uom__icontains=word))
@@ -123,40 +126,39 @@ def search_item(request):
 			result=Item.objects.filter(Q(supplier__icontains=supplier))
 		if result:
 			return render(request,'item/item_list.html',{'object_list':result,'status':'search success.'})
-		return HttpResponseRedirect('/item',{'status':'nothing to find.','object_list':Item.obejcts.all()})
+		return HttpResponseRedirect('/item',{'status':'nothing to find.','object_list':Item.objects.all()})
 	return HttpResponseRedirect('/item',{'status':'Nothing.'})
 
 @login_required
 def export_item_list(request):
-	response=HttpResponse(mimetype="application/vnd.ms-excel")
-	response['Content-Disposition']="attachment;filename=export_agencycustomer.xls"
 	wb=xlwt.Workbook(encoding="utf-8")
 	sheet=wb.add_sheet('ITEMS')
-	sheet.write(0,0,'code')
-	sheet.write(0,1,'name')
-	sheet.write(0,2,'supplier')
-	sheet.write(0,3,'category')
-	sheet.write(0,4,'large_uom')
-	sheet.write(0,5,'large_qty')
-	sheet.write(0,6,'large_price')
-	sheet.write(0,7,'med_uom')
-	sheet.write(0,8,'med_qty')
-	sheet.write(0,9,'med_price')
-	sheet.write(0,10,'sml_uom')
-	sheet.write(0,11,'sml_qty')
-	sheet.write(0,12,'sml_price')
-	sheet.write(0,13,'remark')
-	sheet.write(0,14,'create_by')
-	sheet.write(0,15,'create_date')
-	sheet.write(0,16,'edit_by')
-	sheet.write(0,17,'edit_date')
+	sheet.write(0,0,'CODE')
+	sheet.write(0,1,'NAME')
+	sheet.write(0,2,'SUPPLIER')
+	sheet.write(0,3,'CATEGORY')
+	sheet.write(0,4,'LARGE UOM')
+	sheet.write(0,5,'LARGE QTY')
+	sheet.write(0,6,'LARGE PRICE')
+	sheet.write(0,7,'MED UOM')
+	sheet.write(0,8,'MED QTY')
+	sheet.write(0,9,'MED PRICE')
+	sheet.write(0,10,'SML UOM')
+	sheet.write(0,11,'SML QTY')
+	sheet.write(0,12,'SML PRICE')
+	sheet.write(0,13,'REMARK')
+	sheet.write(0,14,'CREATE BY')
+	sheet.write(0,15,'CREAE DATE')
+	sheet.write(0,16,'EDIT BY')
+	sheet.write(0,17,'EDIT DATE')
 
 	row=1
 	for item in Item.objects.all():
 		sheet.write(row,0,item.code)
 		sheet.write(row,1,item.name)
-		sheet.write(row,2,item.supplier)
-		sheet.write(row,3,item.category)
+		sheet.write(row,2,(Supplier.objects.get(name=item.supplier)).name)
+#		sheet.write(row,3,(Kinds.objects.get(item.category)).)
+		sheet.write(row,3,"")
 		sheet.write(row,4,item.large_uom)
 		sheet.write(row,5,item.large_qty)
 		sheet.write(row,6,item.large_price)
@@ -168,18 +170,19 @@ def export_item_list(request):
 		sheet.write(row,12,item.sml_price)
 		sheet.write(row,13,item.remark)
 		sheet.write(row,14,item.create_by)
-		sheet.write(row,15,item.create_date)
+		sheet.write(row,15,"")
 		sheet.write(row,16,item.edit_by)
-		sheet.write(row,16,item.edit_date)
+		sheet.write(row,17,"")
 		row=row+1
+#	response = HttpResponse(mimetype='application/vnd.ms-excel')
+	response = HttpResponse(content_type='application/vnd.ms-excel')
+	response['Content-Disposition']="attachment;filename=ITEM_LIST.xls"
 	output=StringIO.StringIO()
 	wb.save(output)
 	output.seek(0)
 	response.write(output.getvalue())
 	return response
 		
-
-
 @login_required
 def kinds_list(request):
 	if request.method=='POST':

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_block %}
+<script language="javascript">
+function getEmployee(thisurl){
+	window.open(thisurl,"get employee","width=200,height=400,scrollbars=yes,resizeable=no");
+};
+function getProject(thisurl){
+	window.open(thisurl,"get project","width=200,height=400,scrollbars=yes,resizeable=no");
+};
+</script>
+
+<h3>Create New Manpower Record</h3>
+
+<form action="" method="post">
+	<input type="datetime-local" name="olddate" />
+	<input type="submit" name="submit" value="search" />
+</form>
+
+
+
+
+<form name="manpower">
+
+<input type="button" value="employeeName" onClick="getEmployee();">
+<input type="text" name="employee_name">
+<input type="text" name="employee_code">
+<input type="hidden" name="employee_id" value="">
+
+<input type="button" value="Project" onClick="getProject();">
+<input type="text" name="project_name">
+<input type="text" name="project_code">
+<input type="hidden" name="project_id" value="">
+
+<input type="datetime-local" name="timein"/>
+<input type="datetime_local" name="timeout"/>
+
+Lunch:<input type="checkbox" name="lunch" value="lunch" />
+
+Shift:<select name="shift">
+		<option value="D1">D1</option>
+		<option value="D2">D2</option>
+		<option value="D3">D3</option>
+		<option value="D4">D4</option>
+		<option value="D5">D5</option>
+		<option value="N1">N1</option>
+		<option value="N2">N2</option>
+	</select>
+
+Remark:<textarea name="remark" rows=2 cols=20 ></textarea>
+
+<input type="submit" value="Create" name="create">
+
+</form>
+{% endblock %}

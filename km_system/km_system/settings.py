@@ -39,6 +39,8 @@ INSTALLED_APPS = (
     
     'supplier',
     'item',
+    'sub_contractor',
+#    'man_power',
 )
 
 MIDDLEWARE_CLASSES = (

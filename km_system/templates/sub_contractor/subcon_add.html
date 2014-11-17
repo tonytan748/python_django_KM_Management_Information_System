@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+	KM SYSTEM - Supplier Add
+{% endblock %}
+
+{% block page_content %}
+<h4 class="page-header">Item Add</h4>
+
+<a class="btn btn-default" href="{% url 'item:list' %}">Back to List</a>
+<br>
+<form class="form" action="" method="post">{% csrf_token %}
+	{% for field in form %}
+		<div>{{ field.label_tag }}</div>
+		<div>{{ field }}</div>
+{#	{{ form.as_p }}	#}
+	{% endfor %}
+	<input id="save_supplier" class="btn btn-default" type="submit" value="Save" />
+</form>
+
+{% endblock %}

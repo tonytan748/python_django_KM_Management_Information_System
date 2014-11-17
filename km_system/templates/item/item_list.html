@@ -13,7 +13,7 @@ KM SYSTE - Item List
 
 
 <a href="{% url 'item:kinds' %}" class="btn btn-default">Kinds Management</a>
-<a class="icon" href="#" onclick="javascript:window.open('/export_item/?ids='+document.getElementByIdx_x('ids').value)"><span>Export EXCEL</span></a>
+<a class="btn btn-default" href="{% url 'item:export'%}" ><span>Export EXCEL</span></a>
 
 <form action="{% url 'item:search' %}" method="post" class="form">{% csrf_token %}
 	<input type="text" name="search_name" placeholder="SEARCH">

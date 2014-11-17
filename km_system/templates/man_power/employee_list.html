@@ -1,0 +1,38 @@
+<html>
+<head>
+	<title>Employee List</title>
+	<script language="javascript">
+		function returnEmployee(){
+			var employeeid=$(this).employeeid.value;
+			var employeename=$(this).employeename.value;
+			var employeecode=$(this).employeecode.value;
+			var doc=window.opener.document;
+			doc.manpower.employee_name.value=employeename;
+			doc.manpower.employee_id.value=employeeid;
+			doc.manpower.employee_code.value=employeecode;
+			window.close();
+		}
+	</script>
+</head>
+<body>
+<table>
+<thead>
+	<tr>
+		<td>CODE</td><td>NAME</td><td>-</td>
+	</tr>
+</thead>
+<tbody>
+	{% for employee in employes %}
+	<form><tr>
+		<td><input type="text" name="employeecode" value="{{ employee.code }}" readonly></td>
+		<td><input type="text" name="employeename" value="{{ employee.name }}" readonly></td>
+		<td>
+			<input type="hidden" name="employeeid" value={{employee.id}} />
+			<input type="button" value="Submit" onClick="returnEmployee();" />
+		</td>
+	</tr></form>
+	{% endfor %}
+</tbody>
+</table>
+</body>
+</html>

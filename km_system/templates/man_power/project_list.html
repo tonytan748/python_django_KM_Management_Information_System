@@ -1,0 +1,38 @@
+<html>
+<head>
+	<title>Employee List</title>
+	<script language="javascript">
+		function returnProject(){
+			var projectid=$(this).peojectid.value;
+			var projectname=$(this).projectname.value;
+			var projectcode=$(this).projectcode.value;
+			var doc=window.opener.document;
+			doc.manpower.project_name.value=projectname;
+			doc.manpower.project_id.value=projectid;
+			doc.manpower.project_code.value=projectcode;
+			window.close();
+		}
+	</script>
+</head>
+<body>
+<table>
+<thead>
+	<tr>
+		<td>PROJECT CODE</td><td>PROJECT NAME</td><td>-</td>
+	</tr>
+</thead>
+<tbody>
+	{% for project in projects %}
+	<form><tr>
+		<td><input type="text" name="projectcode" value="{{ project.code }}" readonly></td>
+		<td><input type="text" name="projectname" value="{{ project.name }}" readonly></td>
+		<td>
+			<input type="hidden" name="projectid" value={{ project.id }} />
+			<input type="button" value="Submit" onClick="returnProject();" />
+		</td>
+	</tr></form>
+	{% endfor %}
+</tbody>
+</table>
+</body>
+</html>

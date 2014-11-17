@@ -11,6 +11,7 @@ urlpatterns = patterns('',
 
     url(r'^supplier/',include('supplier.urls',namespace='supplier')),
     url(r'^item/',include('item.urls',namespace='item')),
+    url(r'^subcon/',include('sub_contractor.urls',namespace='subcon')),
 
     url(r'^admin/', include(admin.site.urls)),
 )

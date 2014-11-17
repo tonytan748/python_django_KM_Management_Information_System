@@ -1,0 +1,18 @@
+<table>
+<thead>
+	<tr>
+		<td>EMPLOYEE NAME</td><td>EMPLOYEE ID</td><td>PROJECT CODE</td><td>PROJECT NAME</td><td>TIME IN</td><td>TIME OUT</td><td>LUNCH</td><td>SHIFT</td><td>REMARK</td><td>-</td><td>-</td>
+	</tr>
+</thead>
+<tbody>
+{% if manpower_list %}
+	{% for i in manpower_list %}
+	<tr>
+		<td>{{i.employee.name}}</td><td>{{i.employee.code}}</td><td>{{i.project.code}}</td><td>{{i.project.name}}</td><td>{{i.time_in}}</td><td>{{i.time_out}}</td><td>{{i.lunch}}</td><td>{{i.shift}}</td><td>{{i.ramark}}</td><td>--</td><td>--</td>
+	</tr>
+	{% endfor %}
+{% else %}
+	<tr><b>Nothing</b></tr>
+{% endif %}
+</tbody>
+</table>

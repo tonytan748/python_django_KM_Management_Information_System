@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block page_titel%}
+KM SYSTEM - SubCon List
+{% endblock %}
+
+{% block page_content %}
+<script language="javascript">
+	$("#id_gst_verification").change(function(){
+		(this.checked)?$("#id_gst_reg_no").removeAttr("readonly"):$("#id_gst_reg_no").attr("readonly","readonly");
+	});
+</script>
+
+<h4 class="page-header">Subcon List</h4>
+
+{#<a href="{% url 'subcon:add' %}" class="btn btn-default">Add New Subcon</a>#}
+<form action="{% url 'subcon:add' %}" method="post" class="form-inline">{%csrf_token%}
+	{% for field in form %}
+	<div class="form-group">
+		{{field.errors}}
+		<div>{{field.label_tag}}{{field}}</div>
+	</div>
+	{% endfor %}
+{#	{{form.as_p}}	#}
+	<input type="submit" value="ADD" class="btn btn-default">
+</form>
+
+<div class="rows">
+<a class="btn btn-default" href="{% url 'subcon:export'%}" ><span>Export EXCEL</span></a>
+
+<form action="{% url 'subcon:search' %}" method="post" class="form">{% csrf_token %}
+	<input type="text" name="search_name" placeholder="SEARCH">
+	<input type="submit" value="SEARCH" class="btn btn-default">
+</form>
+</div>
+
+<hr>
+{% if status %}
+	<p>{{ status }}</p>
+{% endif %}
+
+<div class="table-responsive">
+<table class="table table-condensed table-striped">
+<thead>
+	<tr>
+		<td class="span1">CODE</td>
+		<td class="span1">NAME</td>
+		<td class="span1">TEL</td>
+		<td class="span1">FAX</td>
+		<td class="span1">CONTACT</td>
+		<td class="span1">ADDRESS</td>
+		<td class="span1">SCOPE_OF_WORK</td>
+		<td class="span1">GST_VERIFICATION</td>
+		<td class="span1">GST_REG_NO</td>
+		<td class="span1">REMARK</td>
+		<td class="span1">CREATE_BY</td>
+		<td class="span1">CREATE_DATE</td>
+		<td class="span1">EDIT_BY</td>
+		<td class="span1">EDIT_DATE</td>
+		<td>-</td><td>-</td>
+	</tr>
+</thead>
+<tbody id="item_list">
+{% for item in object_list %}
+	<p id="status"></p>
+	<tr>
+	<form id="item_list" action="" method="post" class="form_inline">{% csrf_token %}
+		<td><input id="code" 	type="text" name="code" value="{{ item.code }}" readonly></td>
+		<td><input id="name" 	type="text" name="name" value="{{ item.name }}"></td>
+		<td><input id="tel"	type="text" name="tel" 	value="{{ item.tel }}"></td>
+		<td><input id="fax" 	type="text" name="fax"	value="{{ item.fax }}"></td>
+		<td><input id="contact" type="text" name="contact" value="{{ item.contact }}" ></td>
+		<td><textarea id="address" rows="1" cols="30" name="address">{{ item.large_qty }}</textarea></td>
+		<td><input id="scope_of_work" type="text" name="scope_of_work" 	value="{{ item.scope_of_work }}" ></td>
+		<td><input id="gst_verification" type="text" name="gst_verification" 	value="{{ item.gst_verification }}" ></td>
+		<td><input id="gst_reg_no" 	type="text" name="gst_reg_no" 	value="{{ item.gst_reg_no}}" ></td>
+		<td><textarea id="remark" rows="1" cols="30" name="remark">{{ item.remark }}</textarea></td>
+		<td><input id="create_by" 	type="text" name="create_by" 	value="{{ item.create_by }}" readonly></td>
+		<td><input id="create_date" 	type="text" name="create_date" 	value="{{ item.create_date }}" readonly></td>
+		<td><input id="edit_by" 	type="text" name="edit_by" 	value="{{ item.edit_by }}" readonly></td>
+		<td><input id="edit_date" 	type="text" name="edit_date" 	value="{{ item.edit_date }}" readonly></td>
+		<input id="id" 	type="hidden" name="item_id" value="{{ item.id }}" >
+		<td><input type="submit" value="EDIT" class="btn btn-default" id="edit-{{ item.id}}"></td>
+		<td><a href="{% url 'subcon:delete' item.id %}" class="btn btn-default">DELETE</a></td>
+	</form>
+	</tr>
+
+{% endfor %}
+</tbody>			
+
+</table>
+</div>
+
+
+<script src="{% static 'js/km_ajax.js' %}"></script>
+
+{% endblock %}
