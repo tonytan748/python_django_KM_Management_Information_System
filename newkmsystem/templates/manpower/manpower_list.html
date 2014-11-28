@@ -1,0 +1,56 @@
+{% extends 'base.html'%}
+
+{% load pagination_tags %}
+
+
+{% block title %}
+KM-SYSTEM-Manpower
+{% endblock %}
+
+{% block content %}
+<h2 class="sub-header">Manpower List</h2>
+<div>
+	<a type="button" class="btn btn-default" name="add_manpower" href="{% url 'manpower:add' %}" >ADD</a>
+{#	<button type="button" class="btn btn-default" name="edit_manpower" value="EDIT" href="{% url 'manpower:edit' %}" />#}
+</div>
+
+<div class="table-responsive">
+	{#<iframe src="{% url 'manpower:manpower_list' %}" width=100% height=400 ></iframe>#}
+	
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>EMPLOYEE</th>
+				<th>PROJECT</th>
+				<th>TIME IN</th>
+				<th>TIME OUT</th>
+				<th>LUNCH</th>
+				<th>SHIFT</th>
+				<th>WORKING TIME</th>
+				<th>REMARK</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% autopaginate manpowers %}
+			{% for manpower in manpowers %}
+			<tr>
+				<td>{{ manpower.employee }}</td>
+				<td>{{ manpower.project }}</td>
+				<td>{{ manpower.time_in }}</td>
+				<td>{{ manpower.time_out }}</td>
+				<td>{{ manpower.lunch }}</td>
+				<td>{{ manpower.shift }}</td>
+				<td>{{ manpower.working_time }}</td>
+				<td>{{ manpower.ramark }}</td>
+				<td></td>
+				<td></td>
+			</tr>
+			{% endfor %}
+			{% paginate %}
+		</tbody>
+	</table>
+</div>
+			  
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html'%}
+
+{% block title %}
+KM-SYSTEM-Manpower
+{% endblock %}
+
+{% block content %}
+
+<h2 class="sub-header">Add Manpower</h2>
+
+<div class="">
+	<div class="table-responsive">
+		<h4>Multi Add</h4>
+				<table class="table">
+				<thead>
+					<tr>
+							<th>CODE</th><th>EMPLOYEE</th><th>PROJECT CODE</th><th>TIME IN</th><th>TIME OUT</th><th>LUNCH</th><th>SHIFT</th><th>WORKING TIME</th><th>REMARK</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for manpower in new_manpower %}
+					<tr>
+						<form action="" method="post">
+						<td>{{ manpower.id }}</td><td>{{ manpower.employee }}</td><td>{{ manpower.project }}</td><td>{{ manpower.time_in }}</td><td>{{ manpower.time_out }}</td><td>{{ manpower.lunch }}</td><td>{{ manpower.shift }}</td><td>{{ manpower.working_time }}</td><td>{{ manpower.remark }}</td><td><input type="submit" value="EDIT" name="edit"></td><td><a herf="#" class="btn btn-default">DELETE</a></td>
+						</form>
+					</tr>
+					{% endfor %}
+				</tbody>
+				</table>
+	</div>
+</div>
+{% endblock %}

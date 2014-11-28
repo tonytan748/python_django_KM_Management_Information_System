@@ -38,7 +38,17 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 	
 	'home',
+
 	'registration',
+	#use table as same with form
+	'django_tables2',
+	#navigation for tag
+	'navigation',
+	#set pages
+	'pagination',
+	'datetimewidget',
+	
+	'manpower',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -49,6 +59,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	#for page app
+	'pagination.middleware.PaginationMiddleware',
 )
 
 ROOT_URLCONF = 'newkmsystem.urls'
@@ -71,7 +83,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Singapore'
 
 USE_I18N = True
 
@@ -85,11 +97,24 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+#For django tables2 app
+TEMPLATE_CONTEXT_PROCESSORS+=(
+	'django.core.context_processors.request',
+)
+#For django pagination app
+TEMPLATE_CONTEXT_PROCESSORS+=(
+	"django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.request",
+)
 
 TEMPLATE_DIRS=('./templates',)
 #registration set due to use "django-registration-redux"
 REGISTRATION_OPEN=True
 ACCOUNT_ACTIVATION_DAYS=7
 REGISTRATION_AUTO_LOGIN=True
-LOGIN_REDIRECT_URL='/'
+LOGIN_REDIRECT_URL='/accounts/'
 LOGIN_URL='/accounts/login/'

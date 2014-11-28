@@ -1,0 +1,110 @@
+{% extends 'base.html'%}
+
+{% block title %}
+KM-SYSTEM-Manpower
+{% endblock %}
+
+{% block content %}
+
+<h2 class="sub-header">Add Manpower</h2>
+
+<div>
+{#	<button type="button" class="btn btn-default" name="add_manpower" value="ADD" href="{% url 'manpower:add' %}" />#}
+{#	<button type="button" class="btn btn-default" name="edit_manpower" value="EDIT" href="{% url 'manpower:edit' %}" />#}
+</div>
+
+<div class="col-sm-6 col-md-6">
+	<h4>Single Add</h4>
+	<table class="table">
+	<form action="" method="post" role="form">{% csrf_token %}
+{#		{{single_form}}	#}
+		<tr><td>
+			<label>EMPLOYEE</label></td><td>
+			<select id="single_employee" name="single_employee" >
+				{% for employee in employees %}
+					<option value="{{employee.id}}">{{employee.name}}</option>
+				{% endfor %}
+			</select>
+		</td></tr>
+		<tr><td>
+			<label>PROJECT</label></td><td>
+			<select id="single_project" name="single_project" >
+				{% for project in projects %}
+					<option value="{{project.id}}">{{project.code}} {{project.code_word}}{% if project.rev %} - {{project.rev}}{% else %}{% endif %}</option>
+				{% endfor %}
+			</select>
+		</td></tr>
+		<tr><td>
+			<label>TIMEIN DATE</label></td><td>
+			<input type="Date" name="single_timein_date" id="single_timein_date" >
+		</td></tr>
+		<tr><td>
+			<label>TIMEIN TIME</label></td><td>
+			<input type="Time" name="single_timein_time" id="single_timein_time" >
+		</td></tr>
+		<tr><td>
+			<label>TIMEOUT DATE</label></td><td>
+			<input type="Date" name="single_timeout_date" id="single_timeout_date" >
+		</td></tr>
+		<tr><td>
+			<label>TIMEOUT TIME</label></td><td>
+			<input type="Time" name="single_timeout_time" id="single_timeout_time" >
+		</td></tr>
+		<tr><td>
+			<label>LUNCH</label></td><td>
+			<input type="text" name="single_lunch" id="single_lunch" value="1" >
+		</td></tr>
+		<tr><td>
+			<label>SHIFT</label></td><td>
+			<select id="single_shift" name="single_shift" >
+				{% for shift in shifts %}
+					<option value="{{shift.id}}">{{shift.name}}</option>
+				{% endfor %}
+			</select>
+		</td></tr>
+		<tr><td>
+			<label>WORKING TIME</label></td><td>
+			<input type="text" name="single_working_time" id="single_working_time" >
+		</td></tr>
+		<tr><td>
+			<label>REMARK</label></td><td>
+			<textarea class="form-control" name="single_remark" id="single_remark" rows="1" columns="15" ></textarea>
+		</td></tr>
+		
+		<tr><td><input type="submit" value="Add Single Report" /></td>
+			<td><input type="reset" value="Reset"></td></tr>
+	</form>
+	</table>
+</div>
+
+<div class="col-sm-6 col-md-6">
+	<div class="table-responsive">
+		<h4>Multi Add</h4>
+				<table class="table">
+				<form action="/manpower/multi_add/" method="post" >{%csrf_token%}
+					<tr>
+						<td><label>Project Code</label></td>
+						<td>
+							<select id="multi_project_code" name="multi_project_code">
+								{% for project in projects %}
+									<option value="{{project.id}}">{{project.code}} {{project.code_word}}{% if project.rev %} - {{project.rev}}{% else %}{% endif %}</option>
+								{% endfor %}
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><label>Date From</label></td>
+						<td><input type="date" name="multi_date_from" id="multi_date_from"></td>
+					</tr>
+					<TR>
+						<TD><label>Date To</label></TD>
+						<td><input type="date" name="multi_date_to" id="multi_date_to"></td>
+					</TR>
+					<tr>
+						<td><input id="multiform" type="submit" value="Transfer"></td>
+					</tr>
+				</form>
+				</table>
+	</div>
+</div>
+{% endblock %}

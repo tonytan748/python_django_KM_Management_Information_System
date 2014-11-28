@@ -1,0 +1,6 @@
+<ul class="nav nav-sidebar">
+	{% for category in categories %}
+		{% if c == act_cat %} <li  class="active" > {% else  %} <li>{% endif %}
+		<a href="{{ category.url }}">{{ category.content }}</a></li>
+	{% endfor %}
+</ul>

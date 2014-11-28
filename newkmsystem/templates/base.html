@@ -1,4 +1,4 @@
-
+{% load menu_tags %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>KM SYSTEM</title>
+    <title>{% block title %}{% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
@@ -26,6 +26,20 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+	  {% block extra_head %}
+	  {% endblock %}
+    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" type="text/css"/>
+	  
+	<script type="text/javascript">window.__admin_media_prefix__ = "/admin_media/";</script> 
+	<link rel="stylesheet" type="text/css" href="/admin_media/css/base.css" /> 
+	<link rel="stylesheet" type="text/css" href="/admin_media/css/forms.css" /> 
+	<script type="text/javascript" src="/admin/jsi18n/"></script>
+	<script type="text/javascript" src="/admin_media/js/core.js"></script>
+	{{ form.media }}  
+	
+	  
+	<!--SET DJANGO-TABLES2 -->
+	<link rel="stylesheet" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
   </head>
 
   <body>
@@ -42,7 +56,7 @@
           <a class="navbar-brand" href="#">KM SYSTEM</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-			{% if user.is_authenticated %}
+          {% if user.is_authenticated %}
 			<ul class="nav navbar-nav navbar-right">
             	<li><a href="{% url 'auth_logout' %}?next=/rango/">Logout</a></li>
 			</ul>
@@ -54,61 +68,15 @@
 
     <div class="container-fluid">
       <div class="row">
-		<div class="col-sm-8 col-sm-offset-2 col-md-10 col-md-offset-1 main">
-		{% if user.is_authenticated %}
-			<h1 class="page-header">Hi {{user.username}}</h1>
-			{% if contents %}
-          		<div class="row placeholders">
-			  	{% for content in contents %}
-			 		<div class="col-xs-6 col-sm-3 placeholder">
-              			<img href="{{content.url}}" data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
-              			<h4><a href="{{content.url}}">{{content.content}}</a></h4>
-              			<span class="text-muted">------</span>
-            		</div>
-			  	</div>
-			  	{% endfor %}
-			{% else %}
-				<p>Nothing...</p>
-			{% endif %}
+		<div class="col-sm-3 col-md-2 sidebar">
+          	{% block side_block %}
+			{% nav_categorylist user %}
+			{% endblock %}
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+         	{% block content %}
 			
-			{% if user.is_superuser %}
-			<h2 class="sub-header">All User Right List</h2>
-			  <div class="table-responsive">
-				  
-				<table class="table table-striped">
-					  <thead>
-						<tr>
-						  <th>NAME</th>
-						  <th>CONTENT</th>
-						  <th>READ</th>
-						  <th>CREATE</th>
-						  <th>EDIT</th>
-						  <th>DELETE</th>
-						  <th>EDIT</th>
-						  <th>DEL</th>
-						</tr>
-					  </thead>
-					  <tbody>
-						  {% for right in all_content %}
-						  <form action="" method="post">
-							<tr>
-							  <td>{{ right.user.username }}</td>
-							  <td>{{ right.content }}</td>
-							  <td><input id="read" type="checkbox" name="rights" value="read" {% if "read" in right.rights %}checked="checked"{%endif%} /></td>
-							  <td><input id="create" type="checkbox" name="rights" value="create" {% if "create" in right.rights %}checked="checked"{%endif%} /></td>
-							  <td><input id="edit" type="checkbox" name="rights" value="edit" {% if "edit" in right.rights %}checked="checked"{%endif%} /></td>
-							  <td><input id="delelte" type="checkbox" name="rights" value="delete" {% if "delete" in right.rights %}checked="checked"{%endif%} /></td>
-							  <input type="hidden" value="{{right.id}}" name="id" />
-							  <td><input id="edit_content" type="button" name="edit-content" value="EDIT" /></td>
-{#<!--							  <td><button id="del_content" type="button" name="del-content" value="DELETE" href="{% url 'home:delete' right.id %}" /></td> -->#}
-							</tr>
-						  </form>
-						  {% endfor %}
-					  </tbody>
-					</table>
-				</div>
-			{% endif %}
-		{% endif %}
+			{% endblock %}
         </div>
       </div>
     </div>
