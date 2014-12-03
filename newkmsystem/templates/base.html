@@ -29,17 +29,27 @@
 	  {% block extra_head %}
 	  {% endblock %}
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" type="text/css"/>
-	  
+
 	<script type="text/javascript">window.__admin_media_prefix__ = "/admin_media/";</script> 
 	<link rel="stylesheet" type="text/css" href="/admin_media/css/base.css" /> 
 	<link rel="stylesheet" type="text/css" href="/admin_media/css/forms.css" /> 
 	<script type="text/javascript" src="/admin/jsi18n/"></script>
 	<script type="text/javascript" src="/admin_media/js/core.js"></script>
 	{{ form.media }}  
-	
-	  
+
 	<!--SET DJANGO-TABLES2 -->
 	<link rel="stylesheet" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
+
+	<link rel="stylesheet" media="screen" type="text/css" href="{{ STATIC_URL }}css/datepicker.css" />
+	<script type="text/javascript" src="{{ STATIC_URL }}js/datepicker.js"></script>
+
+	<script type="text/javascript" src="{{STATIC_URL}}js/mootools.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/calendar.js"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  	<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
   </head>
 
   <body>

@@ -44,35 +44,30 @@ def manpower_add(request):
 @login_required
 def multi_manpower_add(request):
 	if request.method=="POST":
-		print request.POST['multi_project_code']
+		print "multi_project_code",request.POST['multi_project_code']
 		print request.POST['multi_date_from']
 		print request.POST['multi_date_to']
 		if request.POST['multi_project_code'] and request.POST['multi_date_from'] and request.POST['multi_date_to']:
 			project_id=request.POST['multi_project_code']
 			multi_date_from=request.POST['multi_date_from']
 			multi_date_to=request.POST['multi_date_to']
-#			multi_datetime_from=datetime.combine(multi_date_from,)
 			try:
 				project=Project.objects.get(id=project_id)
-				print "project: ",project.id
+				print "project",project
 				manpower=ManPower.objects.filter(project=project)
-				#.filter(time_in__date=multi_date_from)
+				print "manpower",manpower
 				for m in manpower:
 					multi_datetime_in=datetime.combine(datetime.strptime(multi_date_to,"%Y-%m-%d"),time(hour=m.time_in.hour,minute=m.time_in.minute,second=m.time_in.second,microsecond=0))
-					print datetime.strftime(multi_datetime_in,"%Y%m%h %H:%M:%S")
 					if datetime.strftime(m.time_in,"%Y-%m-%d")==datetime.strftime(m.time_out,"%Y-%m-%d"):
 						multi_datetime_out=datetime.combine(datetime.strptime(multi_date_to,"%Y-%m-%d"),datetime.strftime(m.time_out,"%H:%M:%S"))
 					else:
 						multi_datetime_out=datetime.combine(datetime.strptime(multi_date_to,"%Y-%m-%d")+datetime.timedelta(datetime.strftime(m.time_out,"%Y-%m-%d")-datetime.strftime(m.time_in,"%Y-%m-%d")),datetime.strftime(m.time_out,"%H:%M:%S"))
-					print "in: %s" % (multi_datetime_in)
-					print "out: %s" % (multi_datetime_out)
+						print "multi_datetime_out",multi_datetime_out
 					new_manpower=Manpower.objects.create(employee=m.employee,project=m.project,time_in=multi_datetime_in,time_out=multi_datetime_out,lunch=m.lunch,shift=m.shift,working_time=m.working_time,remark=m.remark,create_by=request.user,is_checked=False,checked_by="",is_payed=False,payed_period="")
 					new_manpower.save()
 				return render(request,"manpower/manpower_multi_add.html",{"new_manpower":new_manpower})
 			except Exception as e:
-				print str(e)
 				return single_manpower_add(request)
-				#return HttpResponse("errors1")
 		else:
 			return HttpResponse("Please fill complete information,click <a href='/manpower/add/'>here</a> go back.")
 	else:

@@ -2,6 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 
+from django.utils.timezone import get_current_timezone
+tz = get_current_timezone()
+fmt="%Y-%m-%d %H:%M:%S.%f"
+
 class Shift(models.Model):
 	name=models.CharField(max_length=100,unique=True)
 	def __unicode__(self):
@@ -59,8 +63,8 @@ class Salary(models.Model):
 class ManPower(models.Model):
 	employee=models.ForeignKey(Employee)
 	project=models.ForeignKey(Project)
-	time_in=models.DateTimeField()
-	time_out=models.DateTimeField()
+	time_in=models.CharField(max_length=30)
+	time_out=models.CharField(max_length=30)
 	lunch=models.IntegerField(default=1)
 	shift=models.ForeignKey(Shift)
 	working_time=models.CharField(max_length=120)
@@ -91,9 +95,9 @@ class ManPower(models.Model):
 	class Meta:
 		ordering=['time_in']
 
-	def save(self,*args,**kwargs):
-		self.working_time=(self.time_out-self.time_in)
-		super(ManPower,self).save(*args,**kwargs)
+#	def save(self,*args,**kwargs):
+#		self.working_time=datetime.datetime.strftime((datetime.datetime.strptime(self.time_out,fmt)-datetime.datetime.striptime(self.time_in,fmt),fmt)
+#		super(ManPower,self).save(*args,**kwargs)
 
 class Lend(models.Model):
 	employee=models.ForeignKey(Employee)
